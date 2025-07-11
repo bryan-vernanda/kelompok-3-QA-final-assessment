@@ -22,7 +22,7 @@ Given('user navigates to the PIM module', () => {
 When('user adds a new employee with first name {string}, middle name {string}, last name {string}', (first, middle, last) => {
     pimPage.clickAddEmployee()
     pimPage.fillNameFields(first, middle, last)
-    pimPage.saveEmployee()
+    pimPage.saveEmployee(first, last)
 })
 
 When('user fills job details with joining date {string}, job title {string}, job category {string}, subunit {string}, employment status {string}', (date, title, category, subunit, status) => {
@@ -33,16 +33,20 @@ When('user assigns a supervisor with the reporting method of {string}', (method)
     pimPage.assignSupervisor(method)
 })
 
-When('user tries to save without filling job details or supervisor', () => {
-    // Skipping job and supervisor tabs
-})
-
 Then('the employee {string} {string} should be added successfully with a unique Employee ID and the details including job title {string}, employment status {string}, subunit {string}, and the assigned supervisor', (firstAndMiddleName, lastName, jobTitle, employmentStatus, subunit) => {
     pimPage.searchEmployee(firstAndMiddleName, lastName)
     pimPage.verifyEmployeeExists(firstAndMiddleName, lastName, jobTitle, employmentStatus, subunit)
 })
 
-Then('the system should display an error or prevent saving', () => {
-    cy.get('.oxd-toast').should('not.exist')
-    cy.get('.oxd-input-group input:invalid').should('exist')
+Then('the system should display an error saying "last name cannot be empty"', () => {
+    cy.get('.--name-grouped-field > :nth-child(3) > .oxd-text').should('contain', 'Required')
+})
+
+Then('the system should display an error saying "first name cannot be empty"', () => {
+    cy.get('.--name-grouped-field > :nth-child(1) > .oxd-text').should('contain', 'Required')
+})
+
+Then('the system should display an error saying "first name and last name cannot be empty"', () => {
+    cy.get('.--name-grouped-field > :nth-child(1) > .oxd-text').should('contain', 'Required')
+    cy.get('.--name-grouped-field > :nth-child(3) > .oxd-text').should('contain', 'Required')
 })

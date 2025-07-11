@@ -13,3 +13,14 @@ Feature: Add New Employee in OrangeHRM
             | Bryan     | V.         | Vernanda | 2025-10-07  | IT Manager              | Professionals | Quality Assurance | Full-Time Permanent | Direct          |
             | Nathanael |            | Lukas    | 2025-11-07  | Chief Executive Officer | Professionals | Development       | Full-Time Contract  | Indirect        |
 
+    Scenario Outline: Fail to add employee due to missing required fields
+        Given user is logged in as admin
+        And user navigates to the PIM module
+        When user adds a new employee with first name "<firstName>", middle name "<middleName>", last name "<lastName>"
+        Then the system should display an error saying <outcome>
+
+        Examples:
+            | firstName | middleName | lastName | outcome                                    |
+            | John      |            |          | "last name cannot be empty"                |
+            |           |            | Doe      | "first name cannot be empty"               |
+            |           | Duncan     |          | "first name and last name cannot be empty" |

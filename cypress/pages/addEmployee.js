@@ -8,23 +8,46 @@ class PimPage {
     }
   
     fillNameFields(first, middle, last) {
-        cy.get('.--name-grouped-field > :nth-child(1) > :nth-child(2) > .oxd-input').should('be.visible').type(first)
+        if (first) {
+            cy.get('.--name-grouped-field > :nth-child(1) > :nth-child(2) > .oxd-input').should('be.visible').type(first)
+        }
         if (middle) {
             cy.get(':nth-child(2) > :nth-child(2) > .oxd-input').should('be.visible').type(middle)
         }
-        cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').should('be.visible').type(last)
+        if (last) {
+            cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').should('be.visible').type(last)
+        }
 
-        cy.get('.oxd-grid-item > .oxd-input-group > :nth-child(2) > .oxd-input')
-        .invoke('val')
-        .then((employeeId) => {
-            cy.wrap(employeeId).as('employeeId')
-        })
+        if (first && last) {
+            cy.get('.oxd-grid-item > .oxd-input-group > :nth-child(2) > .oxd-input')
+            .invoke('val')
+            .then((employeeId) => {
+              // Check if warning of the Employee Id already exists
+              cy.get('.oxd-grid-2 > .oxd-grid-item')
+                .then(($el) => {
+                  const text = $el.text().trim()
+                  if (text.includes('Employee Id already exists')) {
+                    const newId = `EMP${Date.now()}`
+                    cy.get('.oxd-grid-item > .oxd-input-group > :nth-child(2) > .oxd-input')
+                      .clear()
+                      .type(newId)
+                    cy.wrap(newId).as('employeeId')
+                  } else {
+                    // No error, proceed with the existing one
+                    cy.wrap(employeeId).as('employeeId')
+                  }
+                })
+            })
+        }
     }
   
-    saveEmployee() {
+    saveEmployee(first, last) {
         cy.get('.oxd-button--secondary').should('be.visible').click()
-        cy.get('.oxd-toast').should('contain', 'Successfully Saved')
-        cy.wait(2000)
+
+        if (first && last) {
+            cy.get('.oxd-toast').should('contain', 'Successfully Saved')
+            cy.wait(2000)
+        }
     }
   
     fillJobDetails(date, title, category, subunit, status) {
