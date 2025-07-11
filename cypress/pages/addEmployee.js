@@ -2,6 +2,11 @@
 // SELECTOR CONSTANTS
 // ====================
 
+// Login
+const FD_USERNAME = ':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-input'
+const FD_PASSWORD = ':nth-child(3) > .oxd-input-group > :nth-child(2) > .oxd-input'
+const BTN_LOGIN = '.oxd-button'
+
 // Navigation
 const NAV_PIM = ':nth-child(2) > .oxd-main-menu-item'
 
@@ -52,6 +57,18 @@ class PimPage {
         cy.wait(2000)
     }
 
+    enterUsername(username) {
+        cy.get(FD_USERNAME).clear().should('be.visible').type(username)
+    }
+
+    enterPassword(password) {
+        cy.get(FD_PASSWORD).clear().should('be.visible').type(password)
+    }
+
+    clickLogin() {
+        cy.get(BTN_LOGIN).should('be.visible').click()
+    }
+
     goToPim() {
         cy.get(NAV_PIM).should('be.visible').click()
     }
@@ -69,22 +86,29 @@ class PimPage {
             cy.get(INP_EMPLOYEE_ID)
             .invoke('val')
             .then((employeeId) => {
-                cy.get(TXT_EMPLOYEE_ID_WARNING).then(($el) => {
-                    if ($el.text().includes('Employee Id already exists')) {
-                        const newId = `EMP${Date.now()}`
-                        cy.get(INP_EMPLOYEE_ID).clear().type(newId)
-                        cy.wrap(newId).as('employeeId')
-                    } else {
-                        cy.wrap(employeeId).as('employeeId')
-                    }
-                })
+                cy.wrap(employeeId).as('employeeId')
             })
         }
     }
 
     saveEmployee(first, last) {
         cy.get(BTN_SAVE).should('be.visible').click()
+
         if (first && last) {
+            cy.wait(2000)
+            
+            cy.get('body').then(($body) => {
+                const warningText = $body.find(TXT_EMPLOYEE_ID_WARNING).text()
+
+                if (warningText.includes('Employee Id already exists')) {
+                    const newId = Date.now().toString().slice(0, 10)
+                    cy.get(INP_EMPLOYEE_ID).should('be.visible').clear().type(newId)
+                    cy.wrap(newId).as('employeeId')
+
+                    cy.get(BTN_SAVE).should('be.visible').click()
+                }
+            })
+
             this.#verifyToast('Successfully Saved')
         }
     }

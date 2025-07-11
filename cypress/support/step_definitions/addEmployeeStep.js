@@ -1,17 +1,15 @@
 import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
-import LoginPage from '../../pages/loginPage'
 import PimPage from '../../pages/addEmployee'
 
-const loginPage = new LoginPage()
 const pimPage = new PimPage()
 
 Given('user is logged in as admin', () => {
     cy.fixture('users').then((users) => {
         const user = users.standard_admin
         cy.visit('https://opensource-demo.orangehrmlive.com/')
-        loginPage.enterUsername(user.username)
-        loginPage.enterPassword(user.password)
-        loginPage.clickLogin()
+        pimPage.enterUsername(user.username)
+        pimPage.enterPassword(user.password)
+        pimPage.clickLogin()
     })
 })
 
