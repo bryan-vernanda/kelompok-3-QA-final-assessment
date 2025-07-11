@@ -39,14 +39,14 @@ Then('the employee {string} {string} should be added successfully with a unique 
 })
 
 Then('the system should display an error saying "last name cannot be empty"', () => {
-    cy.get('.--name-grouped-field > :nth-child(3) > .oxd-text').should('contain', 'Required')
+    pimPage.verifyLastNameRequired()
 })
 
 Then('the system should display an error saying "first name cannot be empty"', () => {
-    cy.get('.--name-grouped-field > :nth-child(1) > .oxd-text').should('contain', 'Required')
+    pimPage.verifyFirstNameRequired()
 })
 
 Then('the system should display an error saying "first name and last name cannot be empty"', () => {
-    cy.get('.--name-grouped-field > :nth-child(1) > .oxd-text').should('contain', 'Required')
-    cy.get('.--name-grouped-field > :nth-child(3) > .oxd-text').should('contain', 'Required')
+    pimPage.verifyFirstNameRequired()
+    pimPage.verifyLastNameRequired()
 })

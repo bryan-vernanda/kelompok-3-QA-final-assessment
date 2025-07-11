@@ -1,118 +1,168 @@
+// ====================
+// SELECTOR CONSTANTS
+// ====================
+
+// Navigation
+const NAV_PIM = ':nth-child(2) > .oxd-main-menu-item'
+
+// Add Employee
+const BTN_ADD_EMPLOYEE = '.orangehrm-header-container > .oxd-button'
+const INP_FIRST_NAME = '.--name-grouped-field > :nth-child(1) > :nth-child(2) > .oxd-input'
+const INP_MIDDLE_NAME = ':nth-child(2) > :nth-child(2) > .oxd-input'
+const INP_LAST_NAME = ':nth-child(3) > :nth-child(2) > .oxd-input'
+const INP_EMPLOYEE_ID = '.oxd-grid-item > .oxd-input-group > :nth-child(2) > .oxd-input'
+const TXT_EMPLOYEE_ID_WARNING = '.oxd-grid-2 > .oxd-grid-item'
+const BTN_SAVE = '.oxd-button--secondary'
+const TOAST_SUCCESS = '.oxd-toast'
+const ERROR_FIRST_NAME = '.--name-grouped-field > :nth-child(1) > .oxd-text'
+const ERROR_LAST_NAME = '.--name-grouped-field > :nth-child(3) > .oxd-text'
+
+// Job Details Tab
+const TAB_JOB = ':nth-child(6) > .orangehrm-tabs-item'
+const INP_JOINING_DATE = '.oxd-date-input > .oxd-input'
+const SELECT_JOB_TITLE = ':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-select-wrapper'
+const SELECT_JOB_CATEGORY = ':nth-child(4) > .oxd-input-group > :nth-child(2) > .oxd-select-wrapper'
+const SELECT_SUBUNIT = ':nth-child(5) > .oxd-input-group > :nth-child(2) > .oxd-select-wrapper'
+const SELECT_EMP_STATUS = ':nth-child(7) > .oxd-input-group > :nth-child(2) > .oxd-select-wrapper'
+const BTN_SAVE_JOB = '.oxd-form-actions > .oxd-button'
+
+// Report To Tab
+const TAB_REPORT_TO = ':nth-child(8) > .orangehrm-tabs-item'
+const BTN_ADD_SUPERVISOR = ':nth-child(2) > :nth-child(1) > .orangehrm-action-header > .oxd-button'
+const INP_SUPERVISOR = '.oxd-autocomplete-text-input > input'
+const LIST_SUPERVISOR_OPTION = '.oxd-autocomplete-option'
+const SELECT_REPORT_METHOD = '.oxd-select-text'
+
+// Search
+const INP_SEARCH_NAME = ':nth-child(1) > .oxd-input-group > :nth-child(2) > .oxd-autocomplete-wrapper input'
+const INP_SEARCH_ID = ':nth-child(2) > .oxd-input'
+const BTN_SEARCH = '.oxd-form-actions > .oxd-button--secondary'
+
+// Table
+const TBL_ROW = '.oxd-table-body > :nth-child(1) > .oxd-table-row'
+
+
+// ====================
+// CLASS DEFINITION
+// ====================
+
 class PimPage {
+    #verifyToast(message) {
+        cy.get(TOAST_SUCCESS).should('contain', message)
+        cy.wait(2000)
+    }
+
     goToPim() {
-        cy.get(':nth-child(2) > .oxd-main-menu-item').should('be.visible').click()
+        cy.get(NAV_PIM).should('be.visible').click()
     }
-  
+
     clickAddEmployee() {
-        cy.get('.orangehrm-header-container > .oxd-button').should('be.visible').click()
+        cy.get(BTN_ADD_EMPLOYEE).should('be.visible').click()
     }
-  
+
     fillNameFields(first, middle, last) {
-        if (first) {
-            cy.get('.--name-grouped-field > :nth-child(1) > :nth-child(2) > .oxd-input').should('be.visible').type(first)
-        }
-        if (middle) {
-            cy.get(':nth-child(2) > :nth-child(2) > .oxd-input').should('be.visible').type(middle)
-        }
-        if (last) {
-            cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').should('be.visible').type(last)
-        }
+        if (first) cy.get(INP_FIRST_NAME).should('be.visible').type(first)
+        if (middle) cy.get(INP_MIDDLE_NAME).should('be.visible').type(middle)
+        if (last) cy.get(INP_LAST_NAME).should('be.visible').type(last)
 
         if (first && last) {
-            cy.get('.oxd-grid-item > .oxd-input-group > :nth-child(2) > .oxd-input')
+            cy.get(INP_EMPLOYEE_ID)
             .invoke('val')
             .then((employeeId) => {
-              // Check if warning of the Employee Id already exists
-              cy.get('.oxd-grid-2 > .oxd-grid-item')
-                .then(($el) => {
-                  const text = $el.text().trim()
-                  if (text.includes('Employee Id already exists')) {
-                    const newId = `EMP${Date.now()}`
-                    cy.get('.oxd-grid-item > .oxd-input-group > :nth-child(2) > .oxd-input')
-                      .clear()
-                      .type(newId)
-                    cy.wrap(newId).as('employeeId')
-                  } else {
-                    // No error, proceed with the existing one
-                    cy.wrap(employeeId).as('employeeId')
-                  }
+                cy.get(TXT_EMPLOYEE_ID_WARNING).then(($el) => {
+                    if ($el.text().includes('Employee Id already exists')) {
+                        const newId = `EMP${Date.now()}`
+                        cy.get(INP_EMPLOYEE_ID).clear().type(newId)
+                        cy.wrap(newId).as('employeeId')
+                    } else {
+                        cy.wrap(employeeId).as('employeeId')
+                    }
                 })
             })
         }
     }
-  
-    saveEmployee(first, last) {
-        cy.get('.oxd-button--secondary').should('be.visible').click()
 
+    saveEmployee(first, last) {
+        cy.get(BTN_SAVE).should('be.visible').click()
         if (first && last) {
-            cy.get('.oxd-toast').should('contain', 'Successfully Saved')
-            cy.wait(2000)
+            this.#verifyToast('Successfully Saved')
         }
     }
-  
+
     fillJobDetails(date, title, category, subunit, status) {
-        cy.get(':nth-child(6) > .orangehrm-tabs-item').should('be.visible').click()
-        cy.get('.oxd-date-input > .oxd-input').clear().type(date)
-    
-        cy.get(':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-select-wrapper').should('be.visible').click()
+        cy.get(TAB_JOB).should('be.visible').click()
+        cy.get(INP_JOINING_DATE).should('be.visible').clear().type(date)
+
+        cy.get(SELECT_JOB_TITLE).should('be.visible').click()
         cy.contains('.oxd-select-option', title).click()
-    
-        cy.get(':nth-child(4) > .oxd-input-group > :nth-child(2) > .oxd-select-wrapper').should('be.visible').click()
+
+        cy.get(SELECT_JOB_CATEGORY).should('be.visible').click()
         cy.contains('.oxd-select-option', category).click()
-    
-        cy.get(':nth-child(5) > .oxd-input-group > :nth-child(2) > .oxd-select-wrapper').should('be.visible').click()
+
+        cy.get(SELECT_SUBUNIT).should('be.visible').click()
         cy.contains('.oxd-select-option', subunit).click()
-    
-        cy.get(':nth-child(7) > .oxd-input-group > :nth-child(2) > .oxd-select-wrapper').should('be.visible').click()
+
+        cy.get(SELECT_EMP_STATUS).should('be.visible').click()
         cy.contains('.oxd-select-option', status).click()
-    
-        cy.get('.oxd-form-actions > .oxd-button').should('be.visible').click()
-        cy.get('.oxd-toast').should('contain', 'Successfully Updated')
-        cy.wait(2000)
+
+        cy.get(BTN_SAVE_JOB).should('be.visible').click()
+        this.#verifyToast('Successfully Updated')
     }
-  
+
     assignSupervisor(method) {
-        cy.get(':nth-child(8) > .orangehrm-tabs-item').should('be.visible').click()
-        cy.get(':nth-child(2) > :nth-child(1) > .orangehrm-action-header > .oxd-button').should('be.visible').click()
-        cy.get('.oxd-autocomplete-text-input > input').type('a')
+        cy.get(TAB_REPORT_TO).should('be.visible').click()
+        cy.get(BTN_ADD_SUPERVISOR).should('be.visible').click()
+        cy.get(INP_SUPERVISOR).should('be.visible').type('a')
         cy.wait(2000)
-        cy.get('.oxd-autocomplete-option').first().click()
+        cy.get(LIST_SUPERVISOR_OPTION).first().click()
         .invoke('val')
         .then((assignedSupervisor) => {
             cy.wrap(assignedSupervisor).as('assignedSupervisor')
         })
-    
-        cy.get('.oxd-select-text').should('be.visible').click()
+
+        cy.get(SELECT_REPORT_METHOD).should('be.visible').click()
         cy.contains('.oxd-select-option', method).click()
-    
-        cy.get('.oxd-button--secondary').should('be.visible').click()
-        cy.get('.oxd-toast').should('contain', 'Successfully Saved')
-        cy.wait(2000)
+
+        cy.get(BTN_SAVE).should('be.visible').click()
+        this.#verifyToast('Successfully Saved')
     }
-  
+
     searchEmployee(firstAndMiddleName, lastName) {
-        cy.get(':nth-child(2) > .oxd-main-menu-item').should('be.visible').click()
-        cy.get(':nth-child(1) > .oxd-input-group > :nth-child(2) > .oxd-autocomplete-wrapper input').should('be.visible').type(firstAndMiddleName + ' ' + lastName)
+        cy.get(NAV_PIM).should('be.visible').click()
+        cy.get(INP_SEARCH_NAME).should('be.visible').type(`${firstAndMiddleName} ${lastName}`)
         cy.get('@employeeId').then((id) => {
-            cy.get(':nth-child(2) > .oxd-input').should('be.visible').type(id)
+            cy.get(INP_SEARCH_ID).should('be.visible').type(id)
         })
-        cy.get('.oxd-form-actions > .oxd-button--secondary').should('be.visible').click()
+        cy.get(BTN_SEARCH).should('be.visible').click()
     }
-  
+
     verifyEmployeeExists(firstAndMiddleName, lastName, jobTitle, employmentStatus, subunit) {
         cy.get('@employeeId').then((id) => {
-            cy.get('.oxd-table-body > :nth-child(1) > .oxd-table-row > :nth-child(2)').should('contain', id)
+            cy.get(`${TBL_ROW} > :nth-child(2)`).should('contain', id)
         })
-        cy.get('.oxd-table-body > :nth-child(1) > .oxd-table-row > :nth-child(3)').should('contain', firstAndMiddleName)
-        cy.get('.oxd-table-body > :nth-child(1) > .oxd-table-row > :nth-child(4)').should('contain', lastName)
-        cy.get('.oxd-table-body > :nth-child(1) > .oxd-table-row > :nth-child(5)').should('contain', jobTitle)
-        cy.get('.oxd-table-body > :nth-child(1) > .oxd-table-row > :nth-child(6)').should('contain', employmentStatus)
-        cy.get('.oxd-table-body > :nth-child(1) > .oxd-table-row > :nth-child(7)').should('contain', subunit)
+        cy.get(`${TBL_ROW} > :nth-child(3)`).should('contain', firstAndMiddleName)
+        cy.get(`${TBL_ROW} > :nth-child(4)`).should('contain', lastName)
+        cy.get(`${TBL_ROW} > :nth-child(5)`).should('contain', jobTitle)
+        cy.get(`${TBL_ROW} > :nth-child(6)`).should('contain', employmentStatus)
+        cy.get(`${TBL_ROW} > :nth-child(7)`).should('contain', subunit)
         cy.get('@assignedSupervisor').then((supervisor) => {
-            cy.get('.oxd-table-body > :nth-child(1) > .oxd-table-row > :nth-child(8)').should('contain', supervisor)
+            cy.get(`${TBL_ROW} > :nth-child(8)`).should('contain', supervisor)
         })
     }
+
+    verifyFirstNameRequired() {
+        cy.get(ERROR_FIRST_NAME).should('contain', 'Required')
+    }
+      
+    verifyLastNameRequired() {
+        cy.get(ERROR_LAST_NAME).should('contain', 'Required')
+    }
+      
+    verifyFirstAndLastNameRequired() {
+        this.verifyFirstNameRequired()
+        this.verifyLastNameRequired()
+    }
+      
 }
-  
+
 export default PimPage
-  
