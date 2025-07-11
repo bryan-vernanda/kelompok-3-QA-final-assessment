@@ -160,7 +160,8 @@ class PimPage {
     }
 
     searchEmployee(firstAndMiddleName, lastName) {
-        cy.get(NAV_PIM).should('be.visible').click()
+        this.goToPim()
+        this.assertOnPimPage()
         cy.get(INP_SEARCH_NAME).should('be.visible').type(`${firstAndMiddleName} ${lastName}`)
         cy.get('@employeeId').then((id) => {
             cy.get(INP_SEARCH_ID).should('be.visible').type(id)

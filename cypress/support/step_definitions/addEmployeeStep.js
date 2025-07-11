@@ -15,6 +15,7 @@ Given('user is logged in as admin', () => {
 
 Given('user navigates to the PIM module', () => {
     pimPage.goToPim()
+    pimPage.assertOnPimPage()
 })
 
 When('user adds a new employee with first name {string}, middle name {string}, last name {string}', (first, middle, last) => {
