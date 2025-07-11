@@ -9,6 +9,8 @@ const BTN_LOGIN = '.oxd-button'
 
 // Navigation
 const NAV_PIM = ':nth-child(2) > .oxd-main-menu-item'
+const PAGE_HEADER = '.oxd-topbar-header-breadcrumb > .oxd-text'
+const FILTER_TITLE = '.oxd-table-filter-header-title > .oxd-text'
 
 // Add Employee
 const BTN_ADD_EMPLOYEE = '.orangehrm-header-container > .oxd-button'
@@ -73,6 +75,12 @@ class PimPage {
         cy.get(NAV_PIM).should('be.visible').click()
     }
 
+    assertOnPimPage() {
+        cy.url().should('include', '/web/index.php/pim/viewEmployeeList')
+        cy.get(PAGE_HEADER).should('contain', 'PIM')
+        cy.get(FILTER_TITLE).should('contain', 'Employee Information')
+    }
+
     clickAddEmployee() {
         cy.get(BTN_ADD_EMPLOYEE).should('be.visible').click()
     }
@@ -96,7 +104,7 @@ class PimPage {
 
         if (first && last) {
             cy.wait(2000)
-            
+
             cy.get('body').then(($body) => {
                 const warningText = $body.find(TXT_EMPLOYEE_ID_WARNING).text()
 
