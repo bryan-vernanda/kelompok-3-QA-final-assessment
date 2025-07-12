@@ -1,0 +1,6 @@
+# Ignore report folder from language stats
+mochawesome-report/* linguist-vendored
+cypress/reports/* linguist-vendored
+
+# Ignore .html files inside any report folder from language stats
+*.html linguist-generated
