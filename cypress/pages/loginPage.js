@@ -1,9 +1,18 @@
+// ====================
+// SELECTOR CONSTANTS
+// ====================
+
 const LOGIN_TITLE = '.oxd-text--h5'
 const FD_USERNAME = ':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-input'
 const FD_PASSWORD = ':nth-child(3) > .oxd-input-group > :nth-child(2) > .oxd-input'
 const BTN_LOGIN = '.oxd-button'
 const DASHBOARD_TITLE = '.oxd-topbar-header-breadcrumb > .oxd-text'
 const LOGIN_ALERT = '.oxd-alert'
+
+
+// ====================
+// CLASS DEFINITION
+// ====================
 
 class LoginPage {
     visitLoginPage() {
@@ -35,6 +44,7 @@ class LoginPage {
     assertOnErrorPage() {
         cy.get(LOGIN_ALERT).should('be.visible')
     }
+
 }
 
-module.exports = LoginPage
+export default LoginPage

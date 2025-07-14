@@ -1,4 +1,4 @@
-Feature: Add New Employee in OrangeHRM
+Feature: OrangHRM PIM feature
 
     Scenario Outline: Add a new employee with its job details
         Given user is logged in as admin
