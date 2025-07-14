@@ -42,6 +42,7 @@ When('user assigns a supervisor with the reporting method of {string}', (method)
 
 Then('the employee {string} {string} should be added successfully with a unique Employee ID and the details including job title {string}, employment status {string}, subunit {string}, and the assigned supervisor', (firstAndMiddleName, lastName, jobTitle, employmentStatus, subunit) => {
     pimPage.goToPim()
+    pimPage.assertOnPimPage()
     pimPage.searchEmployee(firstAndMiddleName, lastName)
     pimPage.verifyEmployeeExists(firstAndMiddleName, lastName, jobTitle, employmentStatus, subunit)
 })

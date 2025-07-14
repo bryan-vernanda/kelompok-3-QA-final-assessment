@@ -1,4 +1,4 @@
-Feature: OrangHRM PIM feature
+Feature: OrangHRM PIM Feature
 
     Scenario Outline: Add a new employee with its job details
         Given user is logged in as admin
@@ -9,9 +9,10 @@ Feature: OrangHRM PIM feature
         Then the employee "<firstName> <middleName>" "<lastName>" should be added successfully with a unique Employee ID and the details including job title "<jobTitle>", employment status "<employmentStatus>", subunit "<subunit>", and the assigned supervisor
 
         Examples:
-            | firstName | middleName | lastName | joiningDate | jobTitle                | jobCategory   | subunit           | employmentStatus    | reportingMethod |
-            | Bryan     | V.         | Vernanda | 2025-10-07  | IT Manager              | Professionals | Quality Assurance | Full-Time Permanent | Direct          |
-            | Nathanael |            | Lukas    | 2025-11-07  | Chief Executive Officer | Professionals | Development       | Full-Time Contract  | Indirect        |
+            | firstName | middleName | lastName | joiningDate | jobTitle                | jobCategory            | subunit           | employmentStatus    | reportingMethod |
+            | Bryan     | V.         | Vernanda | 2025-10-07  | IT Manager              | Officials and Managers | Quality Assurance | Full-Time Contract  | Direct          |
+            | Nathanael |            | Lukas    | 2025-15-07  | Chief Executive Officer | Professionals          | Finance           | Full-Time Permanent | Indirect        |
+            | John      | Duncan     | Doe      | 2025-20-07  | HR Manager              | Officials and Managers | Development       | Full-Time Probation | Direct          |
 
     Scenario Outline: Fail to add employee due to missing required fields
         Given user is logged in as admin

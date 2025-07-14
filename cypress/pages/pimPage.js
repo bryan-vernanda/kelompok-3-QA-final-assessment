@@ -29,7 +29,7 @@ const SELECT_EMP_STATUS = ':nth-child(7) > .oxd-input-group > :nth-child(2) > .o
 const BTN_SAVE_JOB = '.oxd-form-actions > .oxd-button'
 
 // Report To Tab
-const TAB_REPORT_TO = ':nth-child(8) > .orangehrm-tabs-item'
+const TAB_REPORT_TO = ':nth-child(9) > .orangehrm-tabs-item'
 const BTN_ADD_SUPERVISOR = ':nth-child(2) > :nth-child(1) > .orangehrm-action-header > .oxd-button'
 const INP_SUPERVISOR = '.oxd-autocomplete-text-input > input'
 const LIST_SUPERVISOR_OPTION = '.oxd-autocomplete-option'

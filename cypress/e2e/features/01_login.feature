@@ -1,4 +1,4 @@
-Feature: OrangeHRM Login
+Feature: OrangeHRM Login Feature
 
   Scenario Outline: User logs in with valid and invalid credentials
     Given user is on the login page
