@@ -1,5 +1,5 @@
 const { Given, When, Then } = require('@badeball/cypress-cucumber-preprocessor');
-const LoginPage = require('../../pages/loginPage')
+import LoginPage from '../../pages/loginPage'
 
 const loginPage = new LoginPage()
 

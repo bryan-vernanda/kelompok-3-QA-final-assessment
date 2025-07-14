@@ -42,6 +42,13 @@ const BTN_SEARCH = '.oxd-form-actions > .oxd-button--secondary'
 
 // Table
 const TBL_ROW = '.oxd-table-body > :nth-child(1) > .oxd-table-row'
+const EMP_ID_CELL             = `${TBL_ROW} > :nth-child(2)`
+const EMP_FIRST_MID_CELL      = `${TBL_ROW} > :nth-child(3)`
+const EMP_LAST_NAME_CELL      = `${TBL_ROW} > :nth-child(4)`
+const EMP_JOB_TITLE_CELL      = `${TBL_ROW} > :nth-child(5)`
+const EMP_STATUS_CELL         = `${TBL_ROW} > :nth-child(6)`
+const EMP_SUBUNIT_CELL        = `${TBL_ROW} > :nth-child(7)`
+const EMP_SUPERVISOR_CELL     = `${TBL_ROW} > :nth-child(8)`
 
 
 // ====================
@@ -51,7 +58,41 @@ const TBL_ROW = '.oxd-table-body > :nth-child(1) > .oxd-table-row'
 class PimPage {
     #verifyToast(message) {
         cy.get(TOAST_SUCCESS).should('contain', message)
-        cy.wait(2000)
+        cy.wait(3000)
+    }
+
+    #extractEmployeeId() {
+        cy.get(INP_EMPLOYEE_ID)
+        .invoke('val')
+        .then((employeeId) => {
+            cy.wrap(employeeId).as('employeeId')
+        })
+    }
+
+    #handleEmployeeIdWarning() {
+        cy.get('body').then(($body) => {
+            const warningText = $body.find(TXT_EMPLOYEE_ID_WARNING).text()
+
+            if (warningText.includes('Employee Id already exists')) {
+                const newId = Date.now().toString().slice(0, 10)
+                cy.get(INP_EMPLOYEE_ID).should('be.visible').clear().type(newId)
+                cy.wrap(newId).as('employeeId')
+
+                cy.get(BTN_SAVE).should('be.visible').click()
+            }
+        })
+    }
+
+    #extractAssignedSupervisor() {
+        cy.get(INP_SUPERVISOR)
+        .invoke('val')
+        .then((fullName) => {
+            const nameParts = fullName.trim().split(' ')
+            const first = nameParts[0]
+            const last = nameParts[nameParts.length - 1]
+            const firstAndLast = `${first} ${last}`
+            cy.wrap(firstAndLast).as('assignedSupervisor')
+        })
     }
 
     goToPim() {
@@ -74,11 +115,7 @@ class PimPage {
         if (last) cy.get(INP_LAST_NAME).should('be.visible').type(last)
 
         if (first && last) {
-            cy.get(INP_EMPLOYEE_ID)
-            .invoke('val')
-            .then((employeeId) => {
-                cy.wrap(employeeId).as('employeeId')
-            })
+            this.#extractEmployeeId()
         }
     }
 
@@ -86,26 +123,17 @@ class PimPage {
         cy.get(BTN_SAVE).should('be.visible').click()
 
         if (first && last) {
-            cy.wait(2000)
-
-            cy.get('body').then(($body) => {
-                const warningText = $body.find(TXT_EMPLOYEE_ID_WARNING).text()
-
-                if (warningText.includes('Employee Id already exists')) {
-                    const newId = Date.now().toString().slice(0, 10)
-                    cy.get(INP_EMPLOYEE_ID).should('be.visible').clear().type(newId)
-                    cy.wrap(newId).as('employeeId')
-
-                    cy.get(BTN_SAVE).should('be.visible').click()
-                }
-            })
-
+            cy.wait(3000)
+            this.#handleEmployeeIdWarning()
             this.#verifyToast('Successfully Saved')
         }
     }
 
-    fillJobDetails(date, title, category, subunit, status) {
+    clickJobTab() {
         cy.get(TAB_JOB).should('be.visible').click()
+    }
+
+    fillJobDetails(date, title, category, subunit, status) {
         cy.get(INP_JOINING_DATE).should('be.visible').clear().type(date)
 
         cy.get(SELECT_JOB_TITLE).should('be.visible').click()
@@ -119,51 +147,61 @@ class PimPage {
 
         cy.get(SELECT_EMP_STATUS).should('be.visible').click()
         cy.contains('.oxd-select-option', status).click()
+    }
 
+    saveJobDetails() {
         cy.get(BTN_SAVE_JOB).should('be.visible').click()
         this.#verifyToast('Successfully Updated')
     }
 
-    assignSupervisor(method) {
+    clickReportToTab() {
         cy.get(TAB_REPORT_TO).should('be.visible').click()
+    }
+
+    clickAddSupervisor() {
         cy.get(BTN_ADD_SUPERVISOR).should('be.visible').click()
+    }
+
+    assignSupervisor(method) {
         cy.get(INP_SUPERVISOR).should('be.visible').type('a')
-        cy.wait(2000)
+        cy.wait(3000)
         cy.get(LIST_SUPERVISOR_OPTION).first().click()
-        .invoke('val')
-        .then((assignedSupervisor) => {
-            cy.wrap(assignedSupervisor).as('assignedSupervisor')
-        })
+
+        this.#extractAssignedSupervisor()
 
         cy.get(SELECT_REPORT_METHOD).should('be.visible').click()
         cy.contains('.oxd-select-option', method).click()
+    }
 
+    saveAssignedSupervisor() {
         cy.get(BTN_SAVE).should('be.visible').click()
         this.#verifyToast('Successfully Saved')
     }
 
     searchEmployee(firstAndMiddleName, lastName) {
-        this.goToPim()
-        this.assertOnPimPage()
         cy.get(INP_SEARCH_NAME).should('be.visible').type(`${firstAndMiddleName} ${lastName}`)
+
         cy.get('@employeeId').then((id) => {
             cy.get(INP_SEARCH_ID).should('be.visible').type(id)
         })
+
         cy.get(BTN_SEARCH).should('be.visible').click()
     }
 
     verifyEmployeeExists(firstAndMiddleName, lastName, jobTitle, employmentStatus, subunit) {
         cy.get('@employeeId').then((id) => {
-            cy.get(`${TBL_ROW} > :nth-child(2)`).should('contain', id)
+            cy.get(`${EMP_ID_CELL}`).should('contain', id)
         })
-        cy.get(`${TBL_ROW} > :nth-child(3)`).should('contain', firstAndMiddleName)
-        cy.get(`${TBL_ROW} > :nth-child(4)`).should('contain', lastName)
-        cy.get(`${TBL_ROW} > :nth-child(5)`).should('contain', jobTitle)
-        cy.get(`${TBL_ROW} > :nth-child(6)`).should('contain', employmentStatus)
-        cy.get(`${TBL_ROW} > :nth-child(7)`).should('contain', subunit)
+    
+        cy.get(`${EMP_FIRST_MID_CELL}`).should('contain', firstAndMiddleName)
+        cy.get(`${EMP_LAST_NAME_CELL}`).should('contain', lastName)
+        cy.get(`${EMP_JOB_TITLE_CELL}`).should('contain', jobTitle)
+        cy.get(`${EMP_STATUS_CELL}`).should('contain', employmentStatus)
+        cy.get(`${EMP_SUBUNIT_CELL}`).should('contain', subunit)
+    
         cy.get('@assignedSupervisor').then((supervisor) => {
-            cy.get(`${TBL_ROW} > :nth-child(8)`).should('contain', supervisor)
-        })
+            cy.get(`${EMP_SUPERVISOR_CELL}`).should('contain', supervisor)
+        })        
     }
 
     verifyFirstNameRequired() {
@@ -172,11 +210,6 @@ class PimPage {
       
     verifyLastNameRequired() {
         cy.get(ERROR_LAST_NAME).should('contain', 'Required')
-    }
-      
-    verifyFirstAndLastNameRequired() {
-        this.verifyFirstNameRequired()
-        this.verifyLastNameRequired()
     }
       
 }
