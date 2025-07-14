@@ -2,11 +2,6 @@
 // SELECTOR CONSTANTS
 // ====================
 
-// Login
-const FD_USERNAME = ':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-input'
-const FD_PASSWORD = ':nth-child(3) > .oxd-input-group > :nth-child(2) > .oxd-input'
-const BTN_LOGIN = '.oxd-button'
-
 // Navigation
 const NAV_PIM = ':nth-child(2) > .oxd-main-menu-item'
 const PAGE_HEADER = '.oxd-topbar-header-breadcrumb > .oxd-text'
@@ -57,18 +52,6 @@ class PimPage {
     #verifyToast(message) {
         cy.get(TOAST_SUCCESS).should('contain', message)
         cy.wait(2000)
-    }
-
-    enterUsername(username) {
-        cy.get(FD_USERNAME).clear().should('be.visible').type(username)
-    }
-
-    enterPassword(password) {
-        cy.get(FD_PASSWORD).clear().should('be.visible').type(password)
-    }
-
-    clickLogin() {
-        cy.get(BTN_LOGIN).should('be.visible').click()
     }
 
     goToPim() {
