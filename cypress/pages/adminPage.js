@@ -1,3 +1,7 @@
+// ====================
+// SELECTOR CONSTANTS
+// ====================
+
 // Admin Page
 const MENU_ADMIN = ':nth-child(1) > .oxd-main-menu-item'
 const PAGE_HEADER = '.oxd-topbar-header-breadcrumb-module'
@@ -30,6 +34,11 @@ const USER_USERNAME = `${TBL_ROW} > :nth-child(2)`
 const USER_ROLE     = `${TBL_ROW} > :nth-child(3)`
 const USER_EMP_NAME = `${TBL_ROW} > :nth-child(4)`
 const USER_STATUS   = `${TBL_ROW} > :nth-child(5)`
+
+
+// ====================
+// CLASS DEFINITION
+// ====================
 
 class AdminPage {
     #handleUsernameWarning(newUsername) {

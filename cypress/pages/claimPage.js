@@ -39,7 +39,6 @@ const ERROR_SELECTORS = {
 // Search
 const SEARCH_REF_ID = ':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-autocomplete-wrapper > .oxd-autocomplete-text-input > input'
 const SEARCH_BUTTON = '.oxd-form-actions > .oxd-button--secondary'
-const TABLE_EMPLOYEE = '.oxd-table-card > .oxd-table-row > :nth-child(2)'
 
 // Table
 const TBL_ROW = '.oxd-table-body > :nth-child(1) > .oxd-table-row'
