@@ -10,7 +10,10 @@
 
 ## 🧪 Test Environments
 
-**(will be added)**
+- [Login](https://opensource-demo.orangehrmlive.com/)
+- [Admin Menu](https://opensource-demo.orangehrmlive.com/web/index.php/admin/viewSystemUsers)
+- [PIM Menu](https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList)
+- [Claim Menu](https://opensource-demo.orangehrmlive.com/web/index.php/claim/viewAssignClaim)
 
 ## 🔗 Prerequisites
 
