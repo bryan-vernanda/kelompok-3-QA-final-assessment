@@ -41,9 +41,9 @@ Then('a claim request for {string} should be successfully created with a unique 
     claimPage.pressBack()
     claimPage.assertOnClaimPage()
     claimPage.searchClaim()
-    claimPage.verifyClaimExists(event, description, currency, amount)
+    claimPage.assertClaimExists(event, description, currency, amount)
 })
 
 Then('an error message {string} should appear, preventing the claim expense to be added', (outcome) => {
-    claimPage.verifyErrorDisplayMessage(outcome)
+    claimPage.assertErrorDisplayMessage(outcome)
 })
