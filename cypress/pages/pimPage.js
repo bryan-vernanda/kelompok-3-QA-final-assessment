@@ -55,7 +55,7 @@ const EMP_SUPERVISOR_CELL = `${TBL_ROW} > :nth-child(8)`
 // ====================
 
 class PimPage {
-    #verifyToast(message) {
+    #assertToast(message) {
         cy.get(TOAST_SUCCESS).should('contain', message)
         cy.wait(3000)
     }
@@ -122,7 +122,7 @@ class PimPage {
         if (first && last) {
             cy.wait(3000)
             this.#handleEmployeeIdWarning()
-            this.#verifyToast('Successfully Saved')
+            this.#assertToast('Successfully Saved')
         }
     }
 
@@ -148,7 +148,7 @@ class PimPage {
 
     saveJobDetails() {
         cy.get(BTN_SAVE_JOB).should('be.visible').click()
-        this.#verifyToast('Successfully Updated')
+        this.#assertToast('Successfully Updated')
     }
 
     clickReportToTab() {
@@ -171,7 +171,7 @@ class PimPage {
 
     saveAssignedSupervisor() {
         cy.get(BTN_SAVE).should('be.visible').click()
-        this.#verifyToast('Successfully Saved')
+        this.#assertToast('Successfully Saved')
     }
 
     searchEmployee() {
@@ -182,7 +182,7 @@ class PimPage {
         cy.get(BTN_SEARCH).should('be.visible').click()
     }
 
-    verifyEmployeeExists(firstAndMiddleName, lastName, jobTitle, employmentStatus, subunit) {
+    assertEmployeeExists(firstAndMiddleName, lastName, jobTitle, employmentStatus, subunit) {
         cy.get('@employeeId').then((id) => {
             cy.get(`${EMP_ID_CELL}`).should('contain', id)
         })
@@ -198,11 +198,11 @@ class PimPage {
         })        
     }
 
-    verifyFirstNameRequired() {
+    assertFirstNameRequired() {
         cy.get(ERROR_FIRST_NAME).should('contain', 'Required')
     }
       
-    verifyLastNameRequired() {
+    assertLastNameRequired() {
         cy.get(ERROR_LAST_NAME).should('contain', 'Required')
     }
       

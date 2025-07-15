@@ -56,7 +56,7 @@ const CLAIM_AMOUNT_CELL      = `${TBL_ROW} > :nth-child(8)`
 // ====================
 
 class ClaimPage{
-    #verifyToast() {
+    #assertToast() {
         cy.get(TOAST_SUCCESS).should('contain', 'Successfully Saved')
         cy.wait(3000)
     }
@@ -116,7 +116,7 @@ class ClaimPage{
 
     clickCreateButton(){
         cy.get(CREATE_BUTTON).should('be.visible').click()
-        this.#verifyToast()
+        this.#assertToast()
         this.#extractClaimData(GNRT_EMP_NAME, 'generatedEmployeeName')
         this.#extractClaimData(GNRT_REF_ID, 'generatedReferenceId')
     }
@@ -140,13 +140,13 @@ class ClaimPage{
         cy.get(SAVE_BUTTON).should('be.visible').click()
 
         if (expense && this.#isValidDateFormat(date) && this.#isNumericOnly(amount)) {
-            this.#verifyToast()
+            this.#assertToast()
         }
     }
 
     submitClaim(){
         cy.get(SUBMIT_BUTTON).should('be.visible').click()
-        this.#verifyToast()
+        this.#assertToast()
     }
 
     pressBack(){
@@ -161,7 +161,7 @@ class ClaimPage{
         cy.get(SEARCH_BUTTON).should('be.visible').click()
     }
 
-    verifyClaimExists(event, description, currency, amount) {
+    assertClaimExists(event, description, currency, amount) {
         cy.get('@generatedReferenceId').then((refId) => {
             cy.get(`${CLAIM_REF_ID_CELL}`).should('contain', refId)
         })
@@ -176,7 +176,7 @@ class ClaimPage{
         cy.get(`${CLAIM_AMOUNT_CELL}`).should('contain', this.#formatAmountOfMoney(amount))
     }
 
-    verifyErrorDisplayMessage(message) {
+    assertErrorDisplayMessage(message) {
         if (message === 'Expense Type is required') {
             message = 'Required'
         }

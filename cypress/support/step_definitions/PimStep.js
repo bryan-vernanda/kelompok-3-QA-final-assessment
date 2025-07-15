@@ -44,18 +44,18 @@ Then('the employee {string} {string} should be added successfully with a unique 
     pimPage.goToPim()
     pimPage.assertOnPimPage()
     pimPage.searchEmployee()
-    pimPage.verifyEmployeeExists(firstAndMiddleName, lastName, jobTitle, employmentStatus, subunit)
+    pimPage.assertEmployeeExists(firstAndMiddleName, lastName, jobTitle, employmentStatus, subunit)
 })
 
 Then('the system should display an error saying "last name cannot be empty"', () => {
-    pimPage.verifyLastNameRequired()
+    pimPage.assertLastNameRequired()
 })
 
 Then('the system should display an error saying "first name cannot be empty"', () => {
-    pimPage.verifyFirstNameRequired()
+    pimPage.assertFirstNameRequired()
 })
 
 Then('the system should display an error saying "first name and last name cannot be empty"', () => {
-    pimPage.verifyFirstNameRequired()
-    pimPage.verifyLastNameRequired()
+    pimPage.assertFirstNameRequired()
+    pimPage.assertLastNameRequired()
 })
