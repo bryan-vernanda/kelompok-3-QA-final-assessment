@@ -9,6 +9,7 @@ Given('user is logged in as standard admin user', () => {
     cy.fixture('users').then((users) => {
         const user = users.standard_admin
         loginPage.visitLoginPage()
+        loginPage.assertOnLoginPage()
         loginPage.enterUsername(user.username)
         loginPage.enterPassword(user.password)
         loginPage.clickLogin()
