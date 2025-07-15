@@ -118,3 +118,6 @@ All test results above are based on the current state of the application hosted 
 Since this is an **open-source demo environment**, the system's data may be **modified or reset without warning** at any time. As a result, some inconsistencies such as **missing records**, or **unexpected UI element changes** may occur depending on the exact timing of the test execution.
 
 Therefore, **running the same test more than once** may yield **different results** depending on the current state of the system's data and UI structure at that specific time.
+
+> ⚠️ **Important:**  
+> To run the **Admin Menu** and **Claim Menu** tests successfully, the **PIM Menu feature must be executed first** to generate the necessary employee data. Both features rely on having an existing employee in the system to associate admin accounts or submit claims.
