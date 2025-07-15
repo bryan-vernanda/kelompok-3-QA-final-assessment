@@ -62,10 +62,16 @@ To maintain a clean and modular codebase, the project is organized into three ma
    - On **Windows**: Right-click → "Show in File Explorer"
 
 ## 📊 Test Report (Headless Mode)
-**(will be added)**
+![Headless - Login Feature Test Report](https://drive.google.com/uc?export=view&id=1yRx0oSeMrXqFmGwYtrtoRXAK0iupcpmd)
+![Headless - PIM Menu Feature Test Report](https://drive.google.com/uc?export=view&id=1AIjA4iVn8g91--7j5zLrYXPvOEz8SRbW)
+![Headless - Admin Menu Feature Test Report](https://drive.google.com/uc?export=view&id=1mb-jYGSGAVwoXfcCbVDRQcrL7zpwKX2r)
+![Headless - Claim Menu Feature Test Report](https://drive.google.com/uc?export=view&id=1_it11r5c-V5zLwry1YoaNXF3YeNFHHqE)
 
 ## 🖥️ Test Execution via Cypress GUI
-**(will be added)**
+![GUI - Login Feature Test Report](https://drive.google.com/uc?export=view&id=1XwWe1zi54Lai2NghpTIPiSaddONXc7Lm)
+![GUI - PIM Menu Feature Test Report](https://drive.google.com/uc?export=view&id=1v3lgaDa0wH7CjGkFeHbSKGxvh_dNG1Rd)
+![GUI - Admin Menu Feature Test Report](https://drive.google.com/uc?export=view&id=1-0PyBiEIbtjNEkiCEgHXmy7VpSayekzy)
+![GUI - Claim Menu Feature Test Report](https://drive.google.com/uc?export=view&id=1c5Uicju_BymaYbjJ0NVeBys8UH1i7paz)
 
 ## 🧩 Summary
 
