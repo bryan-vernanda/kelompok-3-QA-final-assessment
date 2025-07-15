@@ -29,26 +29,25 @@ const SELECT_EMP_STATUS = ':nth-child(7) > .oxd-input-group > :nth-child(2) > .o
 const BTN_SAVE_JOB = '.oxd-form-actions > .oxd-button'
 
 // Report To Tab
-const TAB_REPORT_TO = ':nth-child(9) > .orangehrm-tabs-item'
+const TAB_REPORT_TO = ':nth-child(8) > .orangehrm-tabs-item'
 const BTN_ADD_SUPERVISOR = ':nth-child(2) > :nth-child(1) > .orangehrm-action-header > .oxd-button'
 const INP_SUPERVISOR = '.oxd-autocomplete-text-input > input'
 const LIST_SUPERVISOR_OPTION = '.oxd-autocomplete-option'
 const SELECT_REPORT_METHOD = '.oxd-select-text'
 
 // Search
-const INP_SEARCH_NAME = ':nth-child(1) > .oxd-input-group > :nth-child(2) > .oxd-autocomplete-wrapper input'
 const INP_SEARCH_ID = ':nth-child(2) > .oxd-input'
 const BTN_SEARCH = '.oxd-form-actions > .oxd-button--secondary'
 
 // Table
 const TBL_ROW = '.oxd-table-body > :nth-child(1) > .oxd-table-row'
-const EMP_ID_CELL             = `${TBL_ROW} > :nth-child(2)`
-const EMP_FIRST_MID_CELL      = `${TBL_ROW} > :nth-child(3)`
-const EMP_LAST_NAME_CELL      = `${TBL_ROW} > :nth-child(4)`
-const EMP_JOB_TITLE_CELL      = `${TBL_ROW} > :nth-child(5)`
-const EMP_STATUS_CELL         = `${TBL_ROW} > :nth-child(6)`
-const EMP_SUBUNIT_CELL        = `${TBL_ROW} > :nth-child(7)`
-const EMP_SUPERVISOR_CELL     = `${TBL_ROW} > :nth-child(8)`
+const EMP_ID_CELL         = `${TBL_ROW} > :nth-child(2)`
+const EMP_FIRST_MID_CELL  = `${TBL_ROW} > :nth-child(3)`
+const EMP_LAST_NAME_CELL  = `${TBL_ROW} > :nth-child(4)`
+const EMP_JOB_TITLE_CELL  = `${TBL_ROW} > :nth-child(5)`
+const EMP_STATUS_CELL     = `${TBL_ROW} > :nth-child(6)`
+const EMP_SUBUNIT_CELL    = `${TBL_ROW} > :nth-child(7)`
+const EMP_SUPERVISOR_CELL = `${TBL_ROW} > :nth-child(8)`
 
 
 // ====================
@@ -70,10 +69,8 @@ class PimPage {
     }
 
     #handleEmployeeIdWarning() {
-        cy.get('body').then(($body) => {
-            const warningText = $body.find(TXT_EMPLOYEE_ID_WARNING).text()
-
-            if (warningText.includes('Employee Id already exists')) {
+        cy.get(TXT_EMPLOYEE_ID_WARNING).then(($warning) => {
+            if ($warning.text().includes('Employee Id already exists')) {
                 const newId = Date.now().toString().slice(0, 10)
                 cy.get(INP_EMPLOYEE_ID).should('be.visible').clear().type(newId)
                 cy.wrap(newId).as('employeeId')
@@ -166,7 +163,6 @@ class PimPage {
         cy.get(INP_SUPERVISOR).should('be.visible').type('a')
         cy.wait(3000)
         cy.get(LIST_SUPERVISOR_OPTION).first().click()
-
         this.#extractAssignedSupervisor()
 
         cy.get(SELECT_REPORT_METHOD).should('be.visible').click()
@@ -178,9 +174,7 @@ class PimPage {
         this.#verifyToast('Successfully Saved')
     }
 
-    searchEmployee(firstAndMiddleName, lastName) {
-        cy.get(INP_SEARCH_NAME).should('be.visible').type(`${firstAndMiddleName} ${lastName}`)
-
+    searchEmployee() {
         cy.get('@employeeId').then((id) => {
             cy.get(INP_SEARCH_ID).should('be.visible').type(id)
         })
