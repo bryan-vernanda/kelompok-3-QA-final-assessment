@@ -11,8 +11,8 @@
 ## 🧪 Test Environments
 
 - [Login](https://opensource-demo.orangehrmlive.com/)
-- [Admin Menu](https://opensource-demo.orangehrmlive.com/web/index.php/admin/viewSystemUsers)
 - [PIM Menu](https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList)
+- [Admin Menu](https://opensource-demo.orangehrmlive.com/web/index.php/admin/viewSystemUsers)
 - [Claim Menu](https://opensource-demo.orangehrmlive.com/web/index.php/claim/viewAssignClaim)
 
 ## 🔗 Prerequisites
@@ -86,4 +86,36 @@ The separation of concerns ensures that UI changes, test logic, and scenario des
 
 ## 🔍 Key Findings
 
-**(will be added)**
+1. ✅ **Login Feature**  
+   The login feature works flawlessly, with no errors or unexpected behavior during test execution for both **positive** and **negative** cases.
+
+2. 🧑‍💼 **PIM Menu Feature**  
+   The PIM menu works as expected. It allows users to add a new employee and update their details such as **Job Details**, **Supervisor**, and **Reporting Structure**.  
+   However, there is **one caveat**: when creating a new employee, the system auto-generates an **Employee ID**.  
+   Occasionally, this ID may already exist if another user created an employee around the same time.  
+   When this happens, clicking “Save” will trigger a **duplicate Employee ID** error.  
+   To handle this, a function was created to check for the warning and regenerate a new Employee ID if needed.
+
+3. ⚠️ **Admin Menu Feature**  
+   Adding a new admin works properly. However, the `username` field must be **unique** on each test run because the data is stored persistently in the backend.  
+   - If a custom username is already used, the test will fail.  
+   - To handle this, a dynamic username is generated using the current timestamp if necessary:  
+     ```js
+     const uniqueUsername = `${newUsername}-${Date.now()}`;
+     ```
+   - Otherwise, the given `newUsername` is used as-is if it hasn’t been used before.
+
+4. 🧾 **Claim Menu Feature**  
+   This feature allows employees to submit claims such as **transportation allowance**, **medical reimbursement**, and others.  
+   All test cases passed successfully, and no anomalies were found during the testing process.
+
+
+## ℹ️ Additional Note
+
+All test results above are based on the current state of the application hosted at:  
+[https://opensource-demo.orangehrmlive.com/](https://opensource-demo.orangehrmlive.com/)  
+
+Since this is an **open-source demo environment**, the system's data may be **modified or reset without warning** at any time.  
+As a result, some inconsistencies such as **missing records**, or **unexpected UI element changes** may occur depending on the exact timing of the test execution.
+
+Therefore, **running the same test more than once** may yield **different results** depending on the current state of the system's data and UI structure at that specific time.
