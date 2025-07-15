@@ -17,6 +17,12 @@ const BTN_SAVE = '.oxd-button--secondary'
 const TOAST_SUCCESS = '.oxd-toast'
 const INPUT_SEARCH_USERNAME = ':nth-child(2) > .oxd-input'
 const BTN_SEARCH = '.oxd-form-actions > .oxd-button--secondary'
+const PASSWORD_VALIDATION = '.user-password-cell > .oxd-input-group'
+const TXT_ERROR_PASSWORD = [
+    'Your password must contain minimum 1 number',
+    'Should have at least 7 characters',
+    'Your password must contain minimum 1 lower-case letter'
+]
 
 // Table
 const TBL_ROW = '.oxd-table-card > .oxd-table-row'
@@ -43,6 +49,19 @@ class AdminPage {
         const first = nameParts[0]
         const last = nameParts[nameParts.length - 1]
         return `${first} ${last}`
+    }
+
+    #handleTextErrorPassword() {
+        cy.get(PASSWORD_VALIDATION)
+        .invoke('text')
+        .then((text) => {
+            const hasError = TXT_ERROR_PASSWORD.some((msg) => text.includes(msg))
+
+            if (!hasError) {
+                cy.get(TOAST_SUCCESS).should('contain', 'Successfully Saved')
+                cy.wait(5000)
+            }
+        })
     }
 
     goToAdminPage() {
@@ -76,19 +95,20 @@ class AdminPage {
 
         cy.get(INPUT_PASSWORD).should('be.visible').type(password)
         cy.get(INPUT_CONFIRM_PASSWORD).should('be.visible').type(password)
+        cy.wait(3000)
     }
 
     saveUser() {
         cy.get(BTN_SAVE).should('be.visible').click()
-        cy.get(TOAST_SUCCESS).should('contain', 'Successfully Saved')
-        cy.wait(5000)
+
+        this.#handleTextErrorPassword()
     }
 
     searchUser() {
         cy.get('@createdUsername').then((actualUsername) => {
             cy.get(INPUT_SEARCH_USERNAME).should('be.visible').type(actualUsername)
         })
-        
+
         cy.get(BTN_SEARCH).should('be.visible').click()
     }
 
@@ -100,6 +120,10 @@ class AdminPage {
         cy.get(`${USER_ROLE}`).should('contain', role)
         cy.get(`${USER_EMP_NAME}`).should('contain', this.#extractFirstAndLastName(employee))
         cy.get(`${USER_STATUS}`).should('contain', status)
+    }
+
+    assertPasswordErrorValidation(outcome) {
+        cy.get(PASSWORD_VALIDATION).should('be.visible').should('contain', outcome)
     }
 }
 

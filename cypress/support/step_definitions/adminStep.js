@@ -30,3 +30,7 @@ Then('the admin {string} with its unique username should appear in the user list
     adminPage.searchUser()
     adminPage.assertUserExists(role, employee, status)
 })
+
+Then('the system should show password error validation message {string}', (outcome) => {
+    adminPage.assertPasswordErrorValidation(outcome)
+})
